@@ -55,7 +55,7 @@ export default function Statistic() {
       <div className="relative w-full h-96 md:h-125 flex items-center justify-center">
         {/* Blue glow effects */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-200 h-200 bg-linear-to-b from-blue-600/30 via-blue-500/10 to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-50 left-1/2 transform -translate-x-1/2 w-200 h-200 bg-linear-to-b from-blue-600/30 via-blue-500/10 to-transparent rounded-full blur-3xl" />
         </div>
 
         {/* Globe image - centered and prominent */}
