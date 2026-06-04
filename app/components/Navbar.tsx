@@ -4,7 +4,6 @@ import { useState, ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "../lib/utils";
 
-
 interface NavbarItem {
   label: string;
   href: string;
@@ -42,28 +41,29 @@ export function Navbar({
   return (
     <nav
       className={cn(
-        "z-40 w-full border-b border-separator bg-background/70 backdrop-blur-lg",
+        "w-full border-b border-slate-800/70 bg-slate-950/95 text-white backdrop-blur-xl",
         position === "sticky" && "sticky top-0",
         position === "fixed" && "fixed top-0",
+        position === "static" && "relative",
         className
       )}
     >
       <header
         className={cn(
-          "flex h-16 items-center justify-between px-6",
+          "flex items-center justify-between gap-4 px-4 py-3",
           maxWidth !== "full" && maxWidthClasses[maxWidth],
           "mx-auto"
         )}
       >
         <div className="flex items-center gap-4">
           <button
-            className="md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-900 text-slate-100 md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
             aria-expanded={isMenuOpen}
           >
             <span className="sr-only">Menu</span>
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMenuOpen ? (
                 <path
                   strokeLinecap="round"
@@ -81,14 +81,21 @@ export function Navbar({
               )}
             </svg>
           </button>
-          {brand}
+
+          <div className="flex items-center gap-3">
+            {brand}
+          </div>
         </div>
-        <ul className="hidden items-center gap-4 md:flex">
+
+        <ul className="hidden items-center gap-8 md:flex">
           {items.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={cn(item.isActive && "font-medium text-accent")}
+                className={cn(
+                  "text-sm font-medium transition hover:text-white",
+                  item.isActive ? "text-white border-b-2 border-cyan-400 pb-1" : "text-slate-300"
+                )}
                 aria-current={item.isActive ? "page" : undefined}
               >
                 {item.label}
@@ -96,30 +103,32 @@ export function Navbar({
             </li>
           ))}
         </ul>
-        {rightContent && <div className="hidden items-center gap-4 md:flex">{rightContent}</div>}
+
+        {rightContent && <div className="hidden items-center gap-3 md:flex">{rightContent}</div>}
       </header>
+
       {isMenuOpen && (
-        <div className="border-t border-separator md:hidden">
-          <ul className="flex flex-col gap-2 p-4">
+        <div className="border-t border-slate-800/70 bg-slate-950/95 md:hidden">
+          <ul className="flex flex-col gap-2 px-4 py-4">
             {items.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   className={cn(
-                    "block py-2",
-                    item.isActive && "font-medium text-accent"
+                    "block rounded-xl px-3 py-2 text-sm transition hover:bg-slate-900 hover:text-white",
+                    item.isActive ? "bg-slate-900 text-white" : "text-slate-300"
                   )}
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
-            {rightContent && (
-              <li className="mt-4 flex flex-col gap-2 border-t border-separator pt-4">
-                {rightContent}
-              </li>
-            )}
           </ul>
+          {rightContent && (
+            <div className="border-t border-slate-800/70 px-4 py-4">
+              <div className="flex flex-col gap-3">{rightContent}</div>
+            </div>
+          )}
         </div>
       )}
     </nav>
