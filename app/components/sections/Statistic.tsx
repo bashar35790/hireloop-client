@@ -59,14 +59,14 @@ export default function Statistic() {
         </div>
 
         {/* Globe image - centered and prominent */}
-        <div className="absolute inset-0 flex items-center justify-center z-0">
-          <div className="relative w-full h-full flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center z-0 ">
+          <div className="relative h-fit flex items-center justify-center">
             <Image
               src={globeImage}
               alt="Globe"
               width={500}
               height={500}
-              className="object-contain opacity-80"
+              className="object-contain opacity-80 w-fit h-fit scale-200 "
               priority
             />
           </div>
