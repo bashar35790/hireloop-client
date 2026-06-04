@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "./components/Navbar";
 import Logo from "./components/Logo";
 import Link from "next/link";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,8 +32,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased light`}
       data-theme="light"
       suppressHydrationWarning
+      cz-shortcut-listen="true"
     >
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
+      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 ">
         <Navbar
           brand={
             <Link href="/" className="flex items-center gap-3 rounded-full transition hover:opacity-90">
@@ -62,6 +64,7 @@ export default function RootLayout({
           }
         />
         {children}
+        <Footer />
       </body>
     </html>
   );
