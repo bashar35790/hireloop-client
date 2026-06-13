@@ -1,6 +1,5 @@
-
-import HeroBanner from '../sections/HeroBanner'
 import Statistic from '../sections/Statistic'
+import HeroBanner from '../sections/Herobanner';
 
 function Home() {
   return (
