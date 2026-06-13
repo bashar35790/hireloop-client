@@ -18,11 +18,13 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const router = useRouter();
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -39,7 +41,7 @@ export default function LoginPage() {
             const { data, error } = await authClient.signIn.email({
                 email,
                 password,
-                // callbackURL: "/dashboard" // Un-comment and change to redirect after success
+                callbackURL: "/" // Un-comment and change to redirect after success
             });
 
             if (error) {

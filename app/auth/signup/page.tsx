@@ -23,6 +23,7 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 
 export default function SignUpPage() {
@@ -30,6 +31,7 @@ export default function SignUpPage() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const router = useRouter();
 
     // File Upload Preview Handler
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +80,7 @@ export default function SignUpPage() {
                 role: role || "user", // passing custom fields via schema profiles
             });
 
-            console.log(data);
+            router.push("/auth/login");
 
             if (error) {
                 setErrorMessage(error.message || "Something went wrong during sign up.");
