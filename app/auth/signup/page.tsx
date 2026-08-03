@@ -26,8 +26,38 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 
+async function uploadProfileImage(file: File): Promise<string> {
+    const res = await fetch("/api/cloudinary/signature", { method: "POST" });
+    if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || "Failed to prepare image upload");
+    }
+
+    const { cloudName, apiKey, signature, timestamp, folder } = await res.json();
+
+    const body = new FormData();
+    body.append("file", file);
+    body.append("api_key", apiKey);
+    body.append("timestamp", timestamp);
+    body.append("signature", signature);
+    body.append("folder", folder);
+
+    const uploadRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        { method: "POST", body }
+    );
+
+    if (!uploadRes.ok) {
+        throw new Error("Failed to upload profile image");
+    }
+
+    const data = await uploadRes.json();
+    return data.secure_url as string;
+}
+
 export default function SignUpPage() {
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -39,6 +69,10 @@ export default function SignUpPage() {
         if (file) {
             if (file.size > 5 * 1024 * 1024) {
                 setErrorMessage("Image size should be less than 5MB");
+                return;
+            }
+            if (!file.type.startsWith("image/")) {
+                setErrorMessage("Please select a valid image file");
                 return;
             }
             const reader = new FileReader();
@@ -63,24 +97,21 @@ export default function SignUpPage() {
         const imageFile = formData.get("image") as File;
 
         try {
-            // 1. (Optional) Convert image file to base64 or upload to cloud storage if required by your schema
-            const imageUrl = "";
+            let imageUrl = "";
             if (imageFile && imageFile.size > 0) {
-                // Handle your image processing or cloud upload here
-                // imageUrl = await uploadToCloudinary(imageFile);
+                setUploading(true);
+                imageUrl = await uploadProfileImage(imageFile);
             }
 
-            // 2. Better Auth sign up client method execution
-            const { data, error } = await authClient.signUp.email({
+            // Better Auth sign up client method execution
+            const { error } = await authClient.signUp.email({
                 email,
                 password,
                 name,
                 image: imageUrl,
                 // @ts-expect-error - role is a custom field passed to the schema profile
-                role: role || "user", // passing custom fields via schema profiles
+                role: role || "seeker", // passing custom fields via schema profiles
             });
-
-            router.push("/auth/login");
 
             if (error) {
                 setErrorMessage(error.message || "Something went wrong during sign up.");
@@ -90,10 +121,13 @@ export default function SignUpPage() {
             // Dummy Simulation for demonstration
             await new Promise((resolve) => setTimeout(resolve, 1500));
             setSuccessMessage("Account registered successfully! Welcome aboard.");
+            await new Promise((resolve) => setTimeout(resolve, 1200));
+            router.push("/auth/login");
 
         } catch (err: unknown) {
             setErrorMessage(err instanceof Error ? err.message : (err as { message?: string })?.message || "An unexpected error occurred.");
         } finally {
+            setUploading(false);
             setLoading(false);
         }
     };
@@ -216,13 +250,10 @@ export default function SignUpPage() {
                             <Select.Popover className="bg-[#121214] border border-zinc-800 rounded-xl shadow-xl mt-1 overflow-hidden">
                                 <ListBox className="p-1 text-zinc-300 text-sm">
                                     <ListBox.Item id="candidate" textValue="Candidate" className="p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
-                                        Candidate
+                                        seeker
                                     </ListBox.Item>
                                     <ListBox.Item id="employer" textValue="Employer" className="p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
-                                        Employer
-                                    </ListBox.Item>
-                                    <ListBox.Item id="admin" textValue="Admin" className="p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
-                                        Administrator
+                                        recruiter
                                     </ListBox.Item>
                                 </ListBox>
                             </Select.Popover>
@@ -268,7 +299,7 @@ export default function SignUpPage() {
                             className="rounded-xl bg-white px-5 py-2 text-sm font-semibold text-black hover:bg-zinc-200 transition disabled:opacity-50"
                             isDisabled={loading}
                         >
-                            {loading ? "Creating..." : "Register Account"}
+                            {uploading ? "Uploading..." : loading ? "Creating..." : "Register Account"}
                         </Button>
                     </div>
                 </Form>
