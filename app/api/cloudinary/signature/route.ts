@@ -22,7 +22,6 @@ export async function POST() {
         {
             timestamp,
             folder,
-            allowed_formats: ["jpg", "jpeg", "png", "webp", "gif"],
         },
         apiSecret
     );
