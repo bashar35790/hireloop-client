@@ -249,11 +249,11 @@ export default function SignUpPage() {
                             </Select.Trigger>
                             <Select.Popover className="bg-[#121214] border border-zinc-800 rounded-xl shadow-xl mt-1 overflow-hidden">
                                 <ListBox className="p-1 text-zinc-300 text-sm">
-                                    <ListBox.Item id="candidate" textValue="Candidate" className="p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
-                                        seeker
+                                    <ListBox.Item id="seeker" textValue="seeker" className="p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
+                                        Seeker
                                     </ListBox.Item>
-                                    <ListBox.Item id="employer" textValue="Employer" className="p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
-                                        recruiter
+                                    <ListBox.Item id="recruiter" textValue="recruiter" className="p-2 hover:bg-zinc-800 rounded-lg cursor-pointer">
+                                        Recruiter
                                     </ListBox.Item>
                                 </ListBox>
                             </Select.Popover>
