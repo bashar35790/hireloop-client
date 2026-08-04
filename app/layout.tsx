@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./components/Navbar";
+import { UserMenu } from "./components/UserMenu";
 import Logo from "./components/Logo";
 import Link from "next/link";
 import Footer from "./components/Footer";
@@ -47,19 +48,7 @@ export default function RootLayout({
             { label: "Company", href: "#company" },
             { label: "Pricing", href: "#pricing", isActive: true },
           ]}
-          rightContent={
-            <>
-              <Link href="/auth/login" className="text-sm font-medium text-slate-200 transition hover:text-white">
-                Sign In
-              </Link>
-              <Link
-                href="/auth/signup"
-                className="inline-flex items-center rounded-full bg-linear-to-r from-indigo-500 via-violet-500 to-fuchsia-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:opacity-95"
-              >
-                Get Started
-              </Link>
-            </>
-          }
+          rightContent={<UserMenu />}
         />
         {children}
         <Footer />

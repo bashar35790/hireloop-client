@@ -41,7 +41,7 @@ export function Navbar({
   return (
     <nav
       className={cn(
-        "w-full border-b border-slate-800/70 bg-slate-950/95 text-white backdrop-blur-xl",
+        "z-50 w-full border-b border-slate-800/70 bg-slate-950/95 text-white backdrop-blur-xl",
         position === "sticky" && "sticky top-0",
         position === "fixed" && "fixed top-0",
         position === "static" && "relative",
@@ -118,6 +118,8 @@ export function Navbar({
                     "block rounded-xl px-3 py-2 text-sm transition hover:bg-slate-900 hover:text-white",
                     item.isActive ? "bg-slate-900 text-white" : "text-slate-300"
                   )}
+                  aria-current={item.isActive ? "page" : undefined}
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
